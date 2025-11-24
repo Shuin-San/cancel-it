@@ -3,7 +3,6 @@ import { auth } from "~/server/auth";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import {
-  Package,
   Upload,
   BookOpen,
   TrendingDown,
@@ -13,7 +12,6 @@ import {
   CheckCircle2,
   BarChart3,
   Calendar,
-  DollarSign,
 } from "lucide-react";
 
 export default async function Home() {
@@ -110,7 +108,7 @@ export default async function Home() {
                 Automatic Detection
               </h3>
               <p className="text-muted-foreground">
-                Upload your bank statements and we'll automatically identify all
+                Upload your bank statements and we&apos;ll automatically identify all
                 recurring subscriptions. No manual entry required.
               </p>
             </div>
@@ -124,7 +122,7 @@ export default async function Home() {
                 Smart Analytics
               </h3>
               <p className="text-muted-foreground">
-                See exactly how much you're spending monthly, track renewal
+                See exactly how much you&apos;re spending monthly, track renewal
                 dates, and get insights into your subscription habits.
               </p>
             </div>
@@ -139,7 +137,7 @@ export default async function Home() {
               </h3>
               <p className="text-muted-foreground">
                 Step-by-step instructions to cancel any subscription quickly.
-                We've done the research so you don't have to.
+                We&apos;ve done the research so you don&apos;t have to.
               </p>
             </div>
 

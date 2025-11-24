@@ -1,7 +1,6 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import ResendProvider from "next-auth/providers/resend";
-import { Resend } from "resend";
 
 import { db } from "~/server/db";
 import {
@@ -11,8 +10,6 @@ import {
   verificationTokens,
 } from "~/server/db/schema";
 import { env } from "~/env";
-
-const resend=new Resend(env.RESEND_API_KEY);
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

@@ -11,7 +11,7 @@ export default function VerifyEmailPage() {
           </div>
           <CardTitle className="text-2xl font-bold">Check your email</CardTitle>
           <CardDescription>
-            We've sent you a magic link to sign in
+            We&apos;ve sent you a magic link to sign in
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -27,7 +27,7 @@ export default function VerifyEmailPage() {
             </div>
           </div>
           <div className="text-center text-sm text-muted-foreground">
-            <p>Didn't receive the email? Check your spam folder or try again.</p>
+            <p>Didn&apos;t receive the email? Check your spam folder or try again.</p>
           </div>
         </CardContent>
       </Card>

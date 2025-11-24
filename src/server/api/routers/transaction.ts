@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { transactions, merchants } from "~/server/db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import Papa from "papaparse";
 
 function normalizeMerchantName(name: string): string {
@@ -26,8 +26,9 @@ export const transactionRouter = createTRPCRouter({
         Papa.parse(input.csvContent, {
           header: true,
           skipEmptyLines: true,
-          complete: async (results) => {
-            try {
+          complete: (results) => {
+            void (async () => {
+              try {
               const rows = results.data as Array<{
                 date?: string;
                 amount?: string;
@@ -70,6 +71,9 @@ export const transactionRouter = createTRPCRouter({
                       normalized: normalizedMerchant,
                     })
                     .returning();
+                  if (!newMerchant) {
+                    throw new Error("Failed to create merchant");
+                  }
                   merchant = newMerchant;
                 }
 
@@ -90,13 +94,14 @@ export const transactionRouter = createTRPCRouter({
                 await ctx.db.insert(transactions).values(transactionData);
               }
 
-              resolve({ count: transactionData.length });
-            } catch (error) {
-              reject(error);
-            }
+                resolve({ count: transactionData.length });
+              } catch (error) {
+                reject(error instanceof Error ? error : new Error(String(error)));
+              }
+            })();
           },
-          error: (error) => {
-            reject(error);
+          error: (error: Error) => {
+            reject(error instanceof Error ? error : new Error(String(error)));
           },
         });
       });

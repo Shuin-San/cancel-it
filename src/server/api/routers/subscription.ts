@@ -88,6 +88,9 @@ export const subscriptionRouter = createTRPCRouter({
             normalized,
           })
           .returning();
+        if (!newMerchant) {
+          throw new Error("Failed to create merchant");
+        }
         merchant = newMerchant;
       }
 

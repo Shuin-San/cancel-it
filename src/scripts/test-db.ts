@@ -35,7 +35,7 @@ async function testDatabaseConnection() {
       console.log("\n3. Querying users table...");
       const userCount = await db.select().from(users).limit(1);
       console.log(`✅ Successfully queried users table`);
-      console.log(`   Sample record:`, userCount[0] || "No users found");
+      console.log(`   Sample record:`, userCount[0] ?? "No users found");
     }
 
     // Test 4: Check database version
@@ -65,5 +65,5 @@ async function testDatabaseConnection() {
   }
 }
 
-testDatabaseConnection();
+void testDatabaseConnection();
 

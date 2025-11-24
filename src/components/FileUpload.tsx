@@ -2,8 +2,6 @@
 
 import { useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import { Upload } from "lucide-react";
 
 interface FileUploadProps {
@@ -30,14 +28,14 @@ export function FileUpload({ onFileSelect, isLoading }: FileUploadProps) {
     e.stopPropagation();
     setDragActive(false);
 
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    if (e.dataTransfer.files?.[0]) {
       onFileSelect(e.dataTransfer.files[0]);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files?.[0]) {
       onFileSelect(e.target.files[0]);
     }
   };

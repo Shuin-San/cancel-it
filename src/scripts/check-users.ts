@@ -21,8 +21,9 @@ async function checkUsers() {
       console.log("      npm run db:migrate");
       return;
     }
-    tablesCheck.forEach((row: { table_name: string }) => {
-      console.log(`   ✅ ${row.table_name}`);
+    tablesCheck.forEach((row) => {
+      const tableRow = row as { table_name: string };
+      console.log(`   ✅ ${tableRow.table_name}`);
     });
 
     // Check users
@@ -34,7 +35,7 @@ async function checkUsers() {
       console.log(`   ✅ Found ${allUsers.length} user(s):`);
       allUsers.forEach((user) => {
         console.log(`      - ${user.email} (ID: ${user.id})`);
-        console.log(`        Created: ${user.emailVerified || "Not verified"}`);
+        console.log(`        Created: ${user.emailVerified?.toISOString() ?? "Not verified"}`);
       });
     }
 
@@ -74,5 +75,5 @@ async function checkUsers() {
   }
 }
 
-checkUsers();
+void checkUsers();
 

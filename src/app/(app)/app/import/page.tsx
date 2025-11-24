@@ -13,7 +13,8 @@ export default function ImportPage() {
 
   const importCsv = api.transaction.importCsv.useMutation({
     onSuccess: async (data) => {
-      toast.success(`Imported ${data.count} transactions`);
+      const result = data as { count: number };
+      toast.success(`Imported ${result.count} transactions`);
       // Trigger subscription detection
       await detectSubscriptions.mutateAsync();
       router.push("/app/subscriptions");
@@ -38,7 +39,7 @@ export default function ImportPage() {
     try {
       const text = await file.text();
       importCsv.mutate({ csvContent: text });
-    } catch (error) {
+    } catch {
       toast.error("Failed to read file");
       setIsLoading(false);
     }

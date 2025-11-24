@@ -2,19 +2,10 @@ import { db } from "~/server/db";
 import {
   transactions,
   subscriptions,
-  merchants,
   subscriptionGuides,
 } from "~/server/db/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { addMonths, addWeeks, addYears, differenceInDays } from "date-fns";
-
-function normalizeMerchantName(name: string): string {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s]/g, "")
-    .replace(/\s+/g, " ");
-}
 
 interface TransactionGroup {
   merchantId: string;
@@ -72,7 +63,10 @@ function isRecurring(group: TransactionGroup): boolean {
   // Check for consistent intervals
   const intervals: number[] = [];
   for (let i = 1; i < sortedDates.length; i++) {
-    const days = differenceInDays(sortedDates[i], sortedDates[i - 1]);
+    const current = sortedDates[i];
+    const previous = sortedDates[i - 1];
+    if (!current || !previous) continue;
+    const days = differenceInDays(current, previous);
     intervals.push(days);
   }
 
@@ -111,7 +105,10 @@ function detectInterval(group: TransactionGroup): "monthly" | "quarterly" | "ann
   const sortedDates = [...group.dates].sort((a, b) => a.getTime() - b.getTime());
   const intervals: number[] = [];
   for (let i = 1; i < sortedDates.length; i++) {
-    const days = differenceInDays(sortedDates[i], sortedDates[i - 1]);
+    const current = sortedDates[i];
+    const previous = sortedDates[i - 1];
+    if (!current || !previous) continue;
+    const days = differenceInDays(current, previous);
     intervals.push(days);
   }
 

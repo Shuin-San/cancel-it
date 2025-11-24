@@ -30,7 +30,7 @@ export default function SignInPage() {
       toast.success("Check your email for a magic link!");
       // Redirect to verify page
       window.location.href = "/auth/verify-email";
-    } catch (error) {
+    } catch {
       toast.error("Failed to send magic link. Please try again.");
       setIsLoading(false);
     }
@@ -45,7 +45,7 @@ export default function SignInPage() {
           </div>
           <CardTitle className="text-2xl font-bold">Sign in to Cancel It</CardTitle>
           <CardDescription>
-            Enter your email address and we'll send you a magic link to sign in
+            Enter your email address and we&apos;ll send you a magic link to sign in
           </CardDescription>
         </CardHeader>
         <CardContent>
