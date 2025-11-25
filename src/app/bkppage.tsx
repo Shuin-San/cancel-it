@@ -3,17 +3,15 @@ import { auth } from "~/server/auth";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import {
-  Package,
-  Mail,
-  Clock,
+  Upload,
+  BookOpen,
+  TrendingDown,
+  Zap,
+  Shield,
   ArrowRight,
   CheckCircle2,
-  Zap,
-  TrendingDown,
   BarChart3,
-  BookOpen,
   Calendar,
-  Shield,
 } from "lucide-react";
 
 export default async function Home() {
@@ -30,8 +28,8 @@ export default async function Home() {
         <div className="container relative mx-auto px-4 py-24 sm:py-32">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border bg-background/80 px-4 py-2 text-sm backdrop-blur-sm">
-              <Clock className="h-4 w-4 text-yellow-500" />
-              <span>Coming Soon</span>
+              <Zap className="h-4 w-4 text-yellow-500" />
+              <span>Take control of your subscriptions today</span>
             </div>
             <h1 className="mb-6 text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
               Stop Wasting Money on
@@ -47,17 +45,17 @@ export default async function Home() {
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button asChild size="lg" className="text-lg px-8 py-6">
-                <Link href="#notify">
-                  Notify Me When It&apos;s Ready
-                  <Mail className="ml-2 h-5 w-5" />
+                <Link href="/auth/signin">
+                  Start 7-Day Free Trial
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
-                <Link href="#features">Learn More</Link>
+                <Link href="#pricing">View Pricing</Link>
               </Button>
             </div>
             <p className="mt-6 text-sm text-muted-foreground">
-              Launching soon • Be the first to know
+              Try free for 7 days • Then $5.99/month • Cancel anytime
             </p>
           </div>
         </div>
@@ -80,8 +78,8 @@ export default async function Home() {
               </div>
             </div>
             <div className="text-center">
-              <div className="mb-2 text-4xl font-bold text-primary">$5.99</div>
-              <div className="text-muted-foreground">Per month</div>
+              <div className="mb-2 text-4xl font-bold text-primary">7 days</div>
+              <div className="text-muted-foreground">Free trial</div>
             </div>
           </div>
         </div>
@@ -104,7 +102,7 @@ export default async function Home() {
             {/* Feature 1 */}
             <div className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Package className="h-6 w-6" />
+                <Upload className="h-6 w-6" />
               </div>
               <h3 className="mb-2 text-xl font-semibold">
                 Automatic Detection
@@ -188,8 +186,59 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Pricing Preview */}
+      {/* How It Works */}
       <section className="bg-muted/50 py-24">
+        <div className="container mx-auto px-4">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-4xl font-bold tracking-tight">
+              How It Works
+            </h2>
+            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+              Get started in minutes and start saving money today
+            </p>
+          </div>
+
+          <div className="mx-auto max-w-4xl">
+            <div className="grid gap-8 md:grid-cols-3">
+              <div className="text-center">
+                <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
+                  1
+                </div>
+                <h3 className="mb-2 text-xl font-semibold">Import Transactions</h3>
+                <p className="text-muted-foreground">
+                  Upload your bank statement CSV file. We support all major
+                  banks and formats.
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
+                  2
+                </div>
+                <h3 className="mb-2 text-xl font-semibold">Auto-Detect</h3>
+                <p className="text-muted-foreground">
+                  Our AI analyzes your transactions and automatically identifies
+                  all recurring subscriptions.
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
+                  3
+                </div>
+                <h3 className="mb-2 text-xl font-semibold">Take Action</h3>
+                <p className="text-muted-foreground">
+                  Review your subscriptions, get cancellation guides, and start
+                  saving money immediately.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
             <div className="mb-16 text-center">
@@ -197,7 +246,7 @@ export default async function Home() {
                 Simple, Transparent Pricing
               </h2>
               <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-                Launching with a special early access offer
+                Start your free trial today. No credit card required.
               </p>
             </div>
 
@@ -237,48 +286,16 @@ export default async function Home() {
                     <span className="text-sm">Cancel anytime, no commitments</span>
                   </li>
                 </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Notify Me Section */}
-      <section id="notify" className="py-24">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-2xl">
-            <div className="mb-16 text-center">
-              <h2 className="mb-4 text-4xl font-bold tracking-tight">
-                Be the First to Know
-              </h2>
-              <p className="mx-auto max-w-xl text-lg text-muted-foreground">
-                Get notified when Cancel It launches. We&apos;ll send you early access
-                and special launch pricing.
-              </p>
-            </div>
-
-            <div className="rounded-lg border bg-card p-8 shadow-lg">
-              <form className="space-y-4">
-                <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="you@example.com"
-                    className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    required
-                  />
-                </div>
-                <Button type="submit" size="lg" className="w-full">
-                  Notify Me
-                  <Mail className="ml-2 h-5 w-5" />
+                <Button asChild size="lg" className="w-full">
+                  <Link href="/auth/signin">
+                    Start Free Trial
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
-                <p className="text-center text-xs text-muted-foreground">
-                  We&apos;ll only email you when we launch. Unsubscribe anytime.
+                <p className="mt-4 text-center text-xs text-muted-foreground">
+                  No credit card required for trial
                 </p>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -351,7 +368,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* CTA Section */}
       <section className="bg-gradient-to-br from-purple-600 to-blue-600 py-24 text-white">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
@@ -359,17 +376,17 @@ export default async function Home() {
               Ready to Take Control?
             </h2>
             <p className="mb-10 text-xl text-purple-100">
-              Join the waitlist and be among the first to start saving money on
-              your subscriptions.
+              Join thousands of users who are saving money by managing their
+              subscriptions better. Get started in 2 minutes.
             </p>
             <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
-              <Link href="#notify">
-                Join the Waitlist
+              <Link href="/auth/signin">
+                Start Your Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <p className="mt-6 text-sm text-purple-200">
-              Launching soon • 7-day free trial • $5.99/month after
+              7-day free trial • Then $5.99/month • Cancel anytime
             </p>
           </div>
         </div>
@@ -377,3 +394,4 @@ export default async function Home() {
     </div>
   );
 }
+
