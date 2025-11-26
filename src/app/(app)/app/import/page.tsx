@@ -48,8 +48,8 @@ export default function ImportPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Import Transactions</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-3xl font-bold tracking-tight">Import Transactions</h1>
+        <p className="mt-1 text-muted-foreground">
           Upload a CSV file with your bank transactions to automatically detect
           subscriptions
         </p>

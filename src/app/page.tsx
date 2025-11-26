@@ -2,13 +2,16 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
+import { Badge } from "~/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
   Package,
   Mail,
   Clock,
   ArrowRight,
   CheckCircle2,
-  Zap,
   TrendingDown,
   BarChart3,
   BookOpen,
@@ -26,16 +29,16 @@ export default async function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="container relative mx-auto px-4 py-24 sm:py-32">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-8 inline-flex items-center gap-2 rounded-full border bg-background/80 px-4 py-2 text-sm backdrop-blur-sm">
-              <Clock className="h-4 w-4 text-yellow-500" />
-              <span>Coming Soon</span>
-            </div>
+            <Badge variant="secondary" className="mb-8 gap-2">
+              <Clock className="h-4 w-4" />
+              Coming Soon
+            </Badge>
             <h1 className="mb-6 text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
               Stop Wasting Money on
-              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 {" "}
                 Forgotten Subscriptions
               </span>
@@ -67,22 +70,28 @@ export default async function Home() {
       <section className="border-b bg-background py-16">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            <div className="text-center">
-              <div className="mb-2 text-4xl font-bold text-primary">$500+</div>
-              <div className="text-muted-foreground">
-                Average annual savings per user
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="mb-2 text-4xl font-bold text-primary">3 min</div>
-              <div className="text-muted-foreground">
-                To detect all your subscriptions
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="mb-2 text-4xl font-bold text-primary">$5.99</div>
-              <div className="text-muted-foreground">Per month</div>
-            </div>
+            <Card className="border-0 bg-transparent shadow-none">
+              <CardContent className="text-center pt-6">
+                <div className="mb-2 text-4xl font-bold text-primary">$500+</div>
+                <div className="text-muted-foreground">
+                  Average annual savings per user
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-0 bg-transparent shadow-none">
+              <CardContent className="text-center pt-6">
+                <div className="mb-2 text-4xl font-bold text-primary">3 min</div>
+                <div className="text-muted-foreground">
+                  To detect all your subscriptions
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-0 bg-transparent shadow-none">
+              <CardContent className="text-center pt-6">
+                <div className="mb-2 text-4xl font-bold text-primary">$5.99</div>
+                <div className="text-muted-foreground">Per month</div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -102,88 +111,88 @@ export default async function Home() {
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {/* Feature 1 */}
-            <div className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Package className="h-6 w-6" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">
-                Automatic Detection
-              </h3>
-              <p className="text-muted-foreground">
-                Upload your bank statements and we&apos;ll automatically identify all
-                recurring subscriptions. No manual entry required.
-              </p>
-            </div>
+            <Card className="transition-all hover:shadow-lg">
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Package className="h-6 w-6" />
+                </div>
+                <CardTitle className="mb-2 text-xl">Automatic Detection</CardTitle>
+                <CardDescription>
+                  Upload your bank statements and we&apos;ll automatically identify all
+                  recurring subscriptions. No manual entry required.
+                </CardDescription>
+              </CardContent>
+            </Card>
 
             {/* Feature 2 */}
-            <div className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <BarChart3 className="h-6 w-6" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">
-                Smart Analytics
-              </h3>
-              <p className="text-muted-foreground">
-                See exactly how much you&apos;re spending monthly, track renewal
-                dates, and get insights into your subscription habits.
-              </p>
-            </div>
+            <Card className="transition-all hover:shadow-lg">
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <BarChart3 className="h-6 w-6" />
+                </div>
+                <CardTitle className="mb-2 text-xl">Smart Analytics</CardTitle>
+                <CardDescription>
+                  See exactly how much you&apos;re spending monthly, track renewal
+                  dates, and get insights into your subscription habits.
+                </CardDescription>
+              </CardContent>
+            </Card>
 
             {/* Feature 3 */}
-            <div className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <BookOpen className="h-6 w-6" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">
-                Cancellation Guides
-              </h3>
-              <p className="text-muted-foreground">
-                Step-by-step instructions to cancel any subscription quickly.
-                We&apos;ve done the research so you don&apos;t have to.
-              </p>
-            </div>
+            <Card className="transition-all hover:shadow-lg">
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <BookOpen className="h-6 w-6" />
+                </div>
+                <CardTitle className="mb-2 text-xl">Cancellation Guides</CardTitle>
+                <CardDescription>
+                  Step-by-step instructions to cancel any subscription quickly.
+                  We&apos;ve done the research so you don&apos;t have to.
+                </CardDescription>
+              </CardContent>
+            </Card>
 
             {/* Feature 4 */}
-            <div className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Calendar className="h-6 w-6" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">
-                Renewal Alerts
-              </h3>
-              <p className="text-muted-foreground">
-                Never be surprised by unexpected charges. Get notified before
-                subscriptions renew so you can cancel in time.
-              </p>
-            </div>
+            <Card className="transition-all hover:shadow-lg">
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Calendar className="h-6 w-6" />
+                </div>
+                <CardTitle className="mb-2 text-xl">Renewal Alerts</CardTitle>
+                <CardDescription>
+                  Never be surprised by unexpected charges. Get notified before
+                  subscriptions renew so you can cancel in time.
+                </CardDescription>
+              </CardContent>
+            </Card>
 
             {/* Feature 5 */}
-            <div className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Shield className="h-6 w-6" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">
-                Privacy First
-              </h3>
-              <p className="text-muted-foreground">
-                Your financial data stays on your device. We use bank-level
-                encryption and never sell your information.
-              </p>
-            </div>
+            <Card className="transition-all hover:shadow-lg">
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Shield className="h-6 w-6" />
+                </div>
+                <CardTitle className="mb-2 text-xl">Privacy First</CardTitle>
+                <CardDescription>
+                  Your financial data stays on your device. We use bank-level
+                  encryption and never sell your information.
+                </CardDescription>
+              </CardContent>
+            </Card>
 
             {/* Feature 6 */}
-            <div className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <TrendingDown className="h-6 w-6" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">
-                Save Money
-              </h3>
-              <p className="text-muted-foreground">
-                Identify and cancel unused subscriptions. Most users save $500+
-                per year by eliminating forgotten charges.
-              </p>
-            </div>
+            <Card className="transition-all hover:shadow-lg">
+              <CardContent className="pt-6">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <TrendingDown className="h-6 w-6" />
+                </div>
+                <CardTitle className="mb-2 text-xl">Save Money</CardTitle>
+                <CardDescription>
+                  Identify and cancel unused subscriptions. Most users save $500+
+                  per year by eliminating forgotten charges.
+                </CardDescription>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -202,42 +211,44 @@ export default async function Home() {
             </div>
 
             <div className="mx-auto max-w-md">
-              <div className="rounded-lg border-2 border-primary bg-card p-8 shadow-lg">
-                <div className="mb-6 text-center">
-                  <div className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+              <Card className="border-2 border-primary">
+                <CardHeader className="text-center">
+                  <Badge variant="secondary" className="mb-2">
                     7-Day Free Trial
-                  </div>
-                  <div className="mb-2 text-5xl font-bold">
+                  </Badge>
+                  <CardTitle className="mb-2 text-5xl">
                     $5.99
                     <span className="text-xl font-normal text-muted-foreground">/month</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
+                  </CardTitle>
+                  <CardDescription>
                     After your free trial ends
-                  </p>
-                </div>
-                <ul className="mb-8 space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
-                    <span className="text-sm">Automatic subscription detection</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
-                    <span className="text-sm">Smart analytics and insights</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
-                    <span className="text-sm">Cancellation guides for all services</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
-                    <span className="text-sm">Renewal alerts and reminders</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
-                    <span className="text-sm">Cancel anytime, no commitments</span>
-                  </li>
-                </ul>
-              </div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                      <span className="text-sm">Automatic subscription detection</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                      <span className="text-sm">Smart analytics and insights</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                      <span className="text-sm">Cancellation guides for all services</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                      <span className="text-sm">Renewal alerts and reminders</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                      <span className="text-sm">Cancel anytime, no commitments</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
@@ -257,29 +268,28 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="rounded-lg border bg-card p-8 shadow-lg">
-              <form className="space-y-4">
-                <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="you@example.com"
-                    className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    required
-                  />
-                </div>
-                <Button type="submit" size="lg" className="w-full">
-                  Notify Me
-                  <Mail className="ml-2 h-5 w-5" />
-                </Button>
-                <p className="text-center text-xs text-muted-foreground">
-                  We&apos;ll only email you when we launch. Unsubscribe anytime.
-                </p>
-              </form>
-            </div>
+            <Card>
+              <CardContent className="pt-6">
+                <form className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input
+                      type="email"
+                      id="email"
+                      placeholder="you@example.com"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" size="lg" className="w-full">
+                    Notify Me
+                    <Mail className="ml-2 h-5 w-5" />
+                  </Button>
+                  <p className="text-center text-xs text-muted-foreground">
+                    We&apos;ll only email you when we launch. Unsubscribe anytime.
+                  </p>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -295,70 +305,70 @@ export default async function Home() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="flex gap-4">
-                <CheckCircle2 className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                <div>
-                  <h3 className="mb-2 font-semibold">
-                    Risk-Free Trial
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Try Cancel It free for 7 days. No credit card required to start.
-                    Cancel anytime.
-                  </p>
-                </div>
-              </div>
+              <Card className="border-0 bg-transparent shadow-none">
+                <CardContent className="flex gap-4 pt-6">
+                  <CheckCircle2 className="mt-1 h-6 w-6 shrink-0 text-primary" />
+                  <div>
+                    <CardTitle className="mb-2">Risk-Free Trial</CardTitle>
+                    <CardDescription>
+                      Try Cancel It free for 7 days. No credit card required to start.
+                      Cancel anytime.
+                    </CardDescription>
+                  </div>
+                </CardContent>
+              </Card>
 
-              <div className="flex gap-4">
-                <CheckCircle2 className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                <div>
-                  <h3 className="mb-2 font-semibold">
-                    Privacy Protected
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Your data never leaves your control. We use local processing
-                    and encryption.
-                  </p>
-                </div>
-              </div>
+              <Card className="border-0 bg-transparent shadow-none">
+                <CardContent className="flex gap-4 pt-6">
+                  <CheckCircle2 className="mt-1 h-6 w-6 shrink-0 text-primary" />
+                  <div>
+                    <CardTitle className="mb-2">Privacy Protected</CardTitle>
+                    <CardDescription>
+                      Your data never leaves your control. We use local processing
+                      and encryption.
+                    </CardDescription>
+                  </div>
+                </CardContent>
+              </Card>
 
-              <div className="flex gap-4">
-                <CheckCircle2 className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                <div>
-                  <h3 className="mb-2 font-semibold">
-                    Easy to Use
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Beautiful, intuitive interface. No technical knowledge
-                    required.
-                  </p>
-                </div>
-              </div>
+              <Card className="border-0 bg-transparent shadow-none">
+                <CardContent className="flex gap-4 pt-6">
+                  <CheckCircle2 className="mt-1 h-6 w-6 shrink-0 text-primary" />
+                  <div>
+                    <CardTitle className="mb-2">Easy to Use</CardTitle>
+                    <CardDescription>
+                      Beautiful, intuitive interface. No technical knowledge
+                      required.
+                    </CardDescription>
+                  </div>
+                </CardContent>
+              </Card>
 
-              <div className="flex gap-4">
-                <CheckCircle2 className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                <div>
-                  <h3 className="mb-2 font-semibold">
-                    Comprehensive Guides
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Step-by-step cancellation instructions for hundreds of
-                    popular services.
-                  </p>
-                </div>
-              </div>
+              <Card className="border-0 bg-transparent shadow-none">
+                <CardContent className="flex gap-4 pt-6">
+                  <CheckCircle2 className="mt-1 h-6 w-6 shrink-0 text-primary" />
+                  <div>
+                    <CardTitle className="mb-2">Comprehensive Guides</CardTitle>
+                    <CardDescription>
+                      Step-by-step cancellation instructions for hundreds of
+                      popular services.
+                    </CardDescription>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="bg-gradient-to-br from-purple-600 to-blue-600 py-24 text-white">
+      <section className="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 py-24 text-white">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl">
               Ready to Take Control?
             </h2>
-            <p className="mb-10 text-xl text-purple-100">
+            <p className="mb-10 text-xl text-white/90">
               Join the waitlist and be among the first to start saving money on
               your subscriptions.
             </p>
@@ -368,7 +378,7 @@ export default async function Home() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <p className="mt-6 text-sm text-purple-200">
+            <p className="mt-6 text-sm text-white/80">
               Launching soon • 7-day free trial • $5.99/month after
             </p>
           </div>

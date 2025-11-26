@@ -4,6 +4,7 @@ import { api, HydrateClient } from "~/trpc/server";
 import { SubscriptionSummaryCards } from "~/components/SubscriptionSummaryCards";
 import { SubscriptionTable } from "~/components/SubscriptionTable";
 import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 
@@ -43,7 +44,7 @@ export default async function SubscriptionsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="mt-1 text-muted-foreground">
               Overview of your subscriptions and spending
             </p>
           </div>
@@ -63,15 +64,19 @@ export default async function SubscriptionsPage() {
         />
 
         {/* Subscriptions Table */}
-        <div>
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">All Subscriptions</h2>
-            <span className="text-sm text-muted-foreground">
-              {subscriptions.length} total
-            </span>
-          </div>
-          <SubscriptionTable subscriptions={subscriptions} />
-        </div>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>All Subscriptions</CardTitle>
+              <CardDescription>
+                {subscriptions.length} total
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <SubscriptionTable subscriptions={subscriptions} />
+          </CardContent>
+        </Card>
       </div>
     </HydrateClient>
   );
