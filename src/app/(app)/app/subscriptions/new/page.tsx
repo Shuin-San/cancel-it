@@ -12,6 +12,7 @@ export default async function NewSubscriptionPage() {
   }
 
   const guides = await api.guide.list();
+  const userSettings = await api.settings.get();
 
   return (
     <HydrateClient>
@@ -31,7 +32,7 @@ export default async function NewSubscriptionPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <SubscriptionForm guides={guides} />
+            <SubscriptionForm guides={guides} defaultCurrency={userSettings.currency} />
           </CardContent>
         </Card>
       </div>

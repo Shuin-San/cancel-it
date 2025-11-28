@@ -16,6 +16,7 @@ export default async function SubscriptionDetailPage({
   }
 
   const subscription = await api.subscription.getById({ id });
+  const userSettings = await api.settings.get();
 
   if (!subscription) {
     notFound();
@@ -23,7 +24,11 @@ export default async function SubscriptionDetailPage({
 
   return (
     <HydrateClient>
-      <SubscriptionDetail subscription={subscription} />
+      <SubscriptionDetail
+        subscription={subscription}
+        currency={userSettings.currency}
+        country={userSettings.country}
+      />
     </HydrateClient>
   );
 }

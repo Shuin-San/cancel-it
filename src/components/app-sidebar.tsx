@@ -9,6 +9,7 @@ import {
   BookOpen,
   LayoutDashboard,
   LogOut,
+  Settings,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { signOut } from "next-auth/react";
@@ -28,6 +29,11 @@ const navigation = [
     name: "Guides",
     href: "/app/guides",
     icon: BookOpen,
+  },
+  {
+    name: "Settings",
+    href: "/app/settings",
+    icon: Settings,
   },
 ];
 

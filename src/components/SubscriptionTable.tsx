@@ -9,9 +9,8 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Badge } from "~/components/ui/badge";
-import { formatCurrency } from "~/lib/utils";
+import { formatCurrency, formatDateShort } from "~/lib/utils";
 import Link from "next/link";
-import { format } from "date-fns";
 
 interface Subscription {
   id: string;
@@ -27,9 +26,15 @@ interface Subscription {
 
 interface SubscriptionTableProps {
   subscriptions: Subscription[];
+  currency?: string;
+  country?: string | null;
 }
 
-export function SubscriptionTable({ subscriptions }: SubscriptionTableProps) {
+export function SubscriptionTable({
+  subscriptions,
+  currency,
+  country,
+}: SubscriptionTableProps) {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "ACTIVE":
@@ -74,12 +79,16 @@ export function SubscriptionTable({ subscriptions }: SubscriptionTableProps) {
                   </Link>
                 </TableCell>
                 <TableCell>
-                  {formatCurrency(parseFloat(sub.averageAmount), sub.currency)}
+                  {formatCurrency(
+                    parseFloat(sub.averageAmount),
+                    currency ?? sub.currency,
+                    country,
+                  )}
                 </TableCell>
                 <TableCell className="capitalize">{sub.billingInterval}</TableCell>
                 <TableCell>
                   {sub.nextExpectedDate
-                    ? format(new Date(sub.nextExpectedDate), "MMM d, yyyy")
+                    ? formatDateShort(sub.nextExpectedDate, country)
                     : "N/A"}
                 </TableCell>
                 <TableCell>{getStatusBadge(sub.status)}</TableCell>

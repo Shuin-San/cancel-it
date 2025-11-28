@@ -22,18 +22,23 @@ interface SubscriptionFormProps {
     providerName: string;
     providerSlug: string;
   }>;
+  defaultCurrency?: string;
 }
 
-export function SubscriptionForm({ guides = [] }: SubscriptionFormProps) {
+export function SubscriptionForm({
+  guides = [],
+  defaultCurrency = "USD",
+}: SubscriptionFormProps) {
   const router = useRouter();
   const [mode, setMode] = useState<"guide" | "custom">("guide");
   const [selectedGuideId, setSelectedGuideId] = useState<string>("");
   const [merchantName, setMerchantName] = useState("");
   const [amount, setAmount] = useState("");
-  const [currency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState(defaultCurrency);
   const [billingInterval, setBillingInterval] = useState<
     "weekly" | "monthly" | "quarterly" | "annual"
   >("monthly");
+  const [nextExpectedDate, setNextExpectedDate] = useState<string>("");
 
   const createSubscription = api.subscription.createManual.useMutation({
     onSuccess: () => {
@@ -77,6 +82,7 @@ export function SubscriptionForm({ guides = [] }: SubscriptionFormProps) {
       currency,
       billingInterval,
       guideId: mode === "guide" ? selectedGuideId : undefined,
+      nextExpectedDate: nextExpectedDate ? new Date(nextExpectedDate) : undefined,
     });
   };
 
@@ -175,6 +181,20 @@ export function SubscriptionForm({ guides = [] }: SubscriptionFormProps) {
             <SelectItem value="annual">Annual</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="renewalDate">Next Renewal Date (Optional)</Label>
+        <Input
+          id="renewalDate"
+          type="date"
+          value={nextExpectedDate}
+          onChange={(e) => setNextExpectedDate(e.target.value)}
+          min={new Date().toISOString().split("T")[0]}
+        />
+        <p className="text-xs text-muted-foreground">
+          Leave empty to auto-calculate based on billing interval
+        </p>
       </div>
 
       <Button type="submit" disabled={createSubscription.isPending} className="w-full">

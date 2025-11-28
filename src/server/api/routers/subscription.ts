@@ -144,5 +144,28 @@ export const subscriptionRouter = createTRPCRouter({
 
       return subscription;
     }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+
+      // Verify the subscription belongs to the user
+      const subscription = await ctx.db.query.subscriptions.findFirst({
+        where: and(
+          eq(subscriptions.id, input.id),
+          eq(subscriptions.userId, userId),
+        ),
+      });
+
+      if (!subscription) {
+        throw new Error("Subscription not found");
+      }
+
+      // Delete the subscription
+      await ctx.db.delete(subscriptions).where(eq(subscriptions.id, input.id));
+
+      return { success: true };
+    }),
 });
 

@@ -8,6 +8,13 @@
       "when": 1763928252395,
       "tag": "0000_lean_red_wolf",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764309773781,
+      "tag": "0001_romantic_obadiah_stane",
+      "breakpoints": true
     }
   ]
 }

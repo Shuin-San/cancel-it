@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
 import { GuideCard } from "~/components/GuideCard";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
 
 export default async function GuidesPage() {
   const session = await auth();

@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { formatCurrency } from "~/lib/utils";
+import { formatCurrency, formatDateShort } from "~/lib/utils";
 import { Calendar, DollarSign, Package } from "lucide-react";
 
 interface SubscriptionSummaryCardsProps {
@@ -7,6 +7,7 @@ interface SubscriptionSummaryCardsProps {
   activeCount: number;
   nextRenewal?: Date | null;
   currency?: string;
+  country?: string | null;
 }
 
 export function SubscriptionSummaryCards({
@@ -14,6 +15,7 @@ export function SubscriptionSummaryCards({
   activeCount,
   nextRenewal,
   currency = "USD",
+  country,
 }: SubscriptionSummaryCardsProps) {
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -24,7 +26,7 @@ export function SubscriptionSummaryCards({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {formatCurrency(totalCost, currency)}
+            {formatCurrency(totalCost, currency, country)}
           </div>
         </CardContent>
       </Card>
@@ -44,12 +46,7 @@ export function SubscriptionSummaryCards({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {nextRenewal
-              ? new Date(nextRenewal).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                })
-              : "N/A"}
+            {nextRenewal ? formatDateShort(nextRenewal, country) : "N/A"}
           </div>
         </CardContent>
       </Card>

@@ -16,6 +16,7 @@ export default async function SubscriptionsPage() {
   }
 
   const subscriptions = await api.subscription.getAll();
+  const userSettings = await api.settings.get();
 
   // Calculate summary stats
   const activeSubs = subscriptions.filter((s) => s.status === "ACTIVE");
@@ -61,6 +62,8 @@ export default async function SubscriptionsPage() {
           totalCost={totalCost}
           activeCount={activeSubs.length}
           nextRenewal={nextRenewal}
+          currency={userSettings.currency}
+          country={userSettings.country}
         />
 
         {/* Subscriptions Table */}
@@ -74,7 +77,11 @@ export default async function SubscriptionsPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <SubscriptionTable subscriptions={subscriptions} />
+            <SubscriptionTable
+              subscriptions={subscriptions}
+              currency={userSettings.currency}
+              country={userSettings.country}
+            />
           </CardContent>
         </Card>
       </div>

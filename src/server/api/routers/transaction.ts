@@ -3,6 +3,11 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { transactions, merchants } from "~/server/db/schema";
 import { eq, desc } from "drizzle-orm";
 import Papa from "papaparse";
+import { extractTextFromPdf } from "~/server/services/vision";
+import {
+  parseBankStatement,
+  normalizeMerchantName as normalizeMerchantNameFromParser,
+} from "~/server/services/bank-statement-parser";
 
 function normalizeMerchantName(name: string): string {
   return name
@@ -136,6 +141,99 @@ export const transactionRouter = createTRPCRouter({
         items: results,
         nextCursor,
       };
+    }),
+
+  importPdf: protectedProcedure
+    .input(
+      z.object({
+        pdfBase64: z.string(), // Base64 encoded PDF
+        currency: z.string().default("USD"),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+
+      try {
+        // Convert base64 to buffer
+        const pdfBuffer = Buffer.from(input.pdfBase64, "base64");
+
+        // Extract text from PDF using Google Vision API
+        const extractedText = await extractTextFromPdf(pdfBuffer);
+
+        // Clear PDF buffer from memory immediately
+        pdfBuffer.fill(0);
+
+        // Parse bank statement
+        const parsedTransactions = parseBankStatement(extractedText, {
+          currency: input.currency,
+        });
+
+        if (parsedTransactions.length === 0) {
+          throw new Error(
+            "No transactions could be extracted from the bank statement",
+          );
+        }
+
+        // Process and save transactions
+        const transactionData = [];
+
+        for (const parsedTx of parsedTransactions) {
+          // Normalize merchant name
+          const normalizedMerchant = normalizeMerchantNameFromParser(
+            parsedTx.merchant ?? parsedTx.description,
+          );
+
+          // Find or create merchant
+          let merchant = await ctx.db.query.merchants.findFirst({
+            where: eq(merchants.normalized, normalizedMerchant),
+          });
+
+          if (!merchant) {
+            const [newMerchant] = await ctx.db
+              .insert(merchants)
+              .values({
+                id: crypto.randomUUID(),
+                name: parsedTx.merchant ?? parsedTx.description.substring(0, 255),
+                normalized: normalizedMerchant,
+              })
+              .returning();
+            if (!newMerchant) {
+              throw new Error("Failed to create merchant");
+            }
+            merchant = newMerchant;
+          }
+
+          // Determine if transaction is subscription-like
+          const isSubscriptionLike =
+            parsedTx.transactionType === "SUBSCRIPTION" ||
+            parsedTx.description.toLowerCase().includes("subscription") ||
+            parsedTx.description.toLowerCase().includes("recurring");
+
+          transactionData.push({
+            id: crypto.randomUUID(),
+            userId,
+            date: parsedTx.date,
+            amount: Math.abs(parsedTx.amount).toString(), // Store absolute value
+            currency: parsedTx.currency,
+            descriptionRaw: parsedTx.description,
+            normalizedMerchant,
+            merchantId: merchant.id,
+            isSubscriptionLike,
+          });
+        }
+
+        // Insert all transactions
+        if (transactionData.length > 0) {
+          await ctx.db.insert(transactions).values(transactionData);
+        }
+
+        return { count: transactionData.length };
+      } catch (error) {
+        if (error instanceof Error) {
+          throw new Error(`Failed to import PDF: ${error.message}`);
+        }
+        throw new Error("Failed to import PDF: Unknown error");
+      }
     }),
 });
 

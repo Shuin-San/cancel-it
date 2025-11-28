@@ -17,6 +17,8 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    GOOGLE_VISION_API_KEY: z.string().optional(),
+    GOOGLE_VISION_PROJECT_ID: z.string().optional(),
   },
 
   /**
@@ -38,6 +40,8 @@ export const env = createEnv({
     EMAIL_FROM: process.env.EMAIL_FROM,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    GOOGLE_VISION_API_KEY: process.env.GOOGLE_VISION_API_KEY,
+    GOOGLE_VISION_PROJECT_ID: process.env.GOOGLE_VISION_PROJECT_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -58,11 +58,12 @@ export const users = createTable("user", (d) => ({
   image: d.varchar({ length: 255 }),
 }));
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   accounts: many(accounts),
   bankConnections: many(bankConnections),
   transactions: many(transactions),
   subscriptions: many(subscriptions),
+  settings: one(userSettings),
 }));
 
 export const accounts = createTable(
@@ -269,6 +270,35 @@ export const subscriptions = createTable(
   ],
 );
 
+export const userSettings = createTable(
+  "user_settings",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id)
+      .unique(),
+    country: d.varchar({ length: 10 }),
+    currency: d.varchar({ length: 10 }).default("USD").notNull(),
+    emailNotificationsEnabled: d.boolean().default(true).notNull(),
+    renewalRemindersEnabled: d.boolean().default(true).notNull(),
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: d
+      .timestamp({ withTimezone: true })
+      .$onUpdate(() => new Date())
+      .notNull(),
+  }),
+  (t) => [index("user_settings_user_id_idx").on(t.userId)],
+);
+
 // Relations
 
 export const bankConnectionsRelations = relations(
@@ -326,3 +356,10 @@ export const subscriptionGuidesRelations = relations(
     subscriptions: many(subscriptions),
   }),
 );
+
+export const userSettingsRelations = relations(userSettings, ({ one }) => ({
+  user: one(users, {
+    fields: [userSettings.userId],
+    references: [users.id],
+  }),
+}));
