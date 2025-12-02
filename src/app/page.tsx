@@ -91,7 +91,7 @@ export default async function Home() {
             </div>
             
             <p className="mt-8 text-sm text-muted-foreground">
-              7-day free trial • $5.99/month • Cancel anytime
+              $5.99/month • Cancel anytime
             </p>
           </div>
         </div>
@@ -241,9 +241,6 @@ export default async function Home() {
                   <div className="mb-4 flex flex-col items-center">
                     <span className="text-5xl font-bold">$5.99</span>
                     <span className="ml-2 text-xl text-muted-foreground">/month</span>
-                    <Badge variant="secondary" className="mb-2">
-                      7-Day Free Trial
-                    </Badge>
                   </div>
 
                 </CardHeader>
@@ -264,7 +261,7 @@ export default async function Home() {
                   </div>
                   <Button asChild size="lg" className="mt-6 w-full">
                     <Link href="#notify">
-                      Start Free Trial
+                      Get Started
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -336,18 +333,6 @@ export default async function Home() {
             <div className="grid gap-8 md:grid-cols-2">
               <div className="flex gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <CheckCircle2 className="h-5 w-5" />
-                </div>
-                <div>
-                  <h3 className="mb-2 text-lg font-semibold">Risk-Free Trial</h3>
-                  <p className="text-muted-foreground">
-                    Try &apos;Cancel It&apos; free for 7 days. Cancel anytime.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <Shield className="h-5 w-5" />
                 </div>
                 <div>
@@ -404,7 +389,7 @@ export default async function Home() {
               </Link>
             </Button>
             <p className="mt-8 text-sm text-white/80">
-              Launching soon • 7-day free trial • $5.99/month after
+              Launching soon • $5.99/month
             </p>
           </div>
         </div>
