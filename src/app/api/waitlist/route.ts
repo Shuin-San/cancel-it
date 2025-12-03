@@ -14,7 +14,7 @@ const waitlistSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body: unknown = await request.json();
     const { email } = waitlistSchema.parse(body);
 
     // Check if email already exists

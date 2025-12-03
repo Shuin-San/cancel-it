@@ -8,6 +8,12 @@ import { Card, CardContent } from "~/components/ui/card";
 import { toast } from "sonner";
 import { Mail, Loader2 } from "lucide-react";
 
+interface WaitlistResponse {
+  message?: string;
+  error?: string;
+  duplicate?: boolean;
+}
+
 export function WaitlistForm() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +31,7 @@ export function WaitlistForm() {
         body: JSON.stringify({ email }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as WaitlistResponse;
 
       if (!response.ok) {
         throw new Error(data.error ?? "Failed to join waitlist");
