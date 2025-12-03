@@ -8,18 +8,42 @@ function getVisionClient(): ImageAnnotatorClient {
     return client;
   }
 
-  if (!env.GOOGLE_VISION_API_KEY) {
-    throw new Error(
-      "Google Vision API key is not configured. Please set GOOGLE_VISION_API_KEY in your environment variables.",
-    );
-  }
+  // Google Cloud Vision client can use credentials in multiple ways:
+  // 1. GOOGLE_APPLICATION_CREDENTIALS env var pointing to a file path (standard)
+  // 2. Credentials object passed directly
+  // 3. Application Default Credentials (ADC)
+  
+  let credentials: { projectId?: string; keyFilename?: string; credentials?: unknown } | undefined;
 
-  const credentials = env.GOOGLE_VISION_PROJECT_ID
-    ? {
+  if (env.GOOGLE_VISION_PROJECT_ID) {
+    // Option 1: Use file path from GOOGLE_APPLICATION_CREDENTIALS env var (set in CI/CD)
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      credentials = {
         projectId: env.GOOGLE_VISION_PROJECT_ID,
-        keyFilename: env.GOOGLE_APPLICATION_CREDENTIALS_JSON
+        keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      };
+    }
+    // Option 2: Parse JSON credentials if provided directly
+    else if (env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
+      try {
+        const credsJson = JSON.parse(env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+        credentials = {
+          projectId: env.GOOGLE_VISION_PROJECT_ID,
+          credentials: credsJson,
+        };
+      } catch {
+        throw new Error(
+          "GOOGLE_APPLICATION_CREDENTIALS_JSON is not valid JSON",
+        );
       }
-    : undefined;
+    }
+    // Option 3: Use Application Default Credentials (for local dev with gcloud auth)
+    else {
+      credentials = {
+        projectId: env.GOOGLE_VISION_PROJECT_ID,
+      };
+    }
+  }
 
   client = new ImageAnnotatorClient(credentials);
 

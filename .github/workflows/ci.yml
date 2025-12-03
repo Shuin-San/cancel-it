@@ -15,9 +15,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create credentials file
-        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > $HOME/vision-sa.json
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > ./vision-sa.json
 
       - name: Set env variable
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/vision-sa.json" >> $GITHUB_ENV
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=./vision-sa.json" >> $GITHUB_ENV
 
       # Add your other steps here (setup node, install dependencies, build, test, etc.)

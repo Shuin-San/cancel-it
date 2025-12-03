@@ -25,6 +25,18 @@ next-env.d.ts
 .DS_Store
 *.pem
 
+# Google Cloud credentials
+vision-sa.json
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!components.json
+!drizzle.config.ts
+!eslint.config.js
+!prettier.config.js
+!postcss.config.js
+
 # debug
 npm-debug.log*
 yarn-debug.log*
