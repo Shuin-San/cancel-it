@@ -17,7 +17,7 @@ function getVisionClient(): ImageAnnotatorClient {
   const credentials = env.GOOGLE_VISION_PROJECT_ID
     ? {
         projectId: env.GOOGLE_VISION_PROJECT_ID,
-        keyFilename: undefined,
+        keyFilename: env.GOOGLE_APPLICATION_CREDENTIALS_JSON
       }
     : undefined;
 

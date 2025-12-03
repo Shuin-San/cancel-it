@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main, development]
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create credentials file
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > $HOME/vision-sa.json
+
+      - name: Set env variable
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/vision-sa.json" >> $GITHUB_ENV
+
+      # Add your other steps here (setup node, install dependencies, build, test, etc.)
