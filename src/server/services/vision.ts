@@ -13,7 +13,8 @@ function getVisionClient(): ImageAnnotatorClient {
   // 2. Credentials object passed directly
   // 3. Application Default Credentials (ADC)
   
-  let credentials: { projectId?: string; keyFilename?: string; credentials?: unknown } | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let credentials: any;
 
   if (env.GOOGLE_VISION_PROJECT_ID) {
     // Option 1: Use file path from GOOGLE_APPLICATION_CREDENTIALS env var (set in CI/CD)
@@ -26,10 +27,15 @@ function getVisionClient(): ImageAnnotatorClient {
     // Option 2: Parse JSON credentials if provided directly
     else if (env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
       try {
-        const credsJson = JSON.parse(env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+        const credsJson = JSON.parse(
+          env.GOOGLE_APPLICATION_CREDENTIALS_JSON,
+        );
         credentials = {
           projectId: env.GOOGLE_VISION_PROJECT_ID,
           credentials: credsJson,
+        } as {
+          projectId: string;
+          credentials: unknown;
         };
       } catch {
         throw new Error(
