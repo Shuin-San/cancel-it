@@ -4,8 +4,6 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import {
   Package,
   Mail,
@@ -21,6 +19,7 @@ import {
   Zap,
   Lock,
 } from "lucide-react";
+import { WaitlistForm } from "~/app/_components/waitlist-form";
 
 export default async function Home() {
   const session = await auth();
@@ -290,29 +289,7 @@ export default async function Home() {
               </p>
             </div>
 
-            <Card className="border-2">
-              <CardContent className="pt-6">
-                <form className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input
-                      type="email"
-                      id="email"
-                      placeholder="you@example.com"
-                      required
-                      className="h-11"
-                    />
-                  </div>
-                  <Button type="submit" size="lg" className="w-full">
-                    Notify Me
-                    <Mail className="ml-2 h-4 w-4" />
-                  </Button>
-                  <p className="text-center text-xs text-muted-foreground">
-                    We&apos;ll only email you when we launch. Unsubscribe anytime.
-                  </p>
-                </form>
-              </CardContent>
-            </Card>
+            <WaitlistForm />
           </div>
         </div>
       </section>

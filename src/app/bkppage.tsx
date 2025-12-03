@@ -46,7 +46,7 @@ export default async function Home() {
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button asChild size="lg" className="text-lg px-8 py-6">
                 <Link href="/auth/signin">
-                  Start 7-Day Free Trial
+                  Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
@@ -55,7 +55,7 @@ export default async function Home() {
               </Button>
             </div>
             <p className="mt-6 text-sm text-muted-foreground">
-              Try free for 7 days • Then $5.99/month • Cancel anytime
+              $5.99/month • Cancel anytime
             </p>
           </div>
         </div>
@@ -78,8 +78,8 @@ export default async function Home() {
               </div>
             </div>
             <div className="text-center">
-              <div className="mb-2 text-4xl font-bold text-primary">7 days</div>
-              <div className="text-muted-foreground">Free trial</div>
+              <div className="mb-2 text-4xl font-bold text-primary">100%</div>
+              <div className="text-muted-foreground">Privacy protected</div>
             </div>
           </div>
         </div>
@@ -246,23 +246,17 @@ export default async function Home() {
                 Simple, Transparent Pricing
               </h2>
               <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-                Start your free trial today. No credit card required.
+                Simple pricing with everything included.
               </p>
             </div>
 
             <div className="mx-auto max-w-md">
               <div className="rounded-lg border-2 border-primary bg-card p-8 shadow-lg">
                 <div className="mb-6 text-center">
-                  <div className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
-                    7-Day Free Trial
-                  </div>
                   <div className="mb-2 text-5xl font-bold">
                     $5.99
                     <span className="text-xl font-normal text-muted-foreground">/month</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    After your free trial ends
-                  </p>
                 </div>
                 <ul className="mb-8 space-y-3">
                   <li className="flex items-start gap-3">
@@ -288,13 +282,10 @@ export default async function Home() {
                 </ul>
                 <Button asChild size="lg" className="w-full">
                   <Link href="/auth/signin">
-                    Start Free Trial
+                    Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <p className="mt-4 text-center text-xs text-muted-foreground">
-                  No credit card required for trial
-                </p>
               </div>
             </div>
           </div>
@@ -312,19 +303,6 @@ export default async function Home() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="flex gap-4">
-                <CheckCircle2 className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
-                <div>
-                  <h3 className="mb-2 font-semibold">
-                    Risk-Free Trial
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Try Cancel It free for 7 days. No credit card required to start.
-                    Cancel anytime.
-                  </p>
-                </div>
-              </div>
-
               <div className="flex gap-4">
                 <CheckCircle2 className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
                 <div>
@@ -381,12 +359,12 @@ export default async function Home() {
             </p>
             <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6">
               <Link href="/auth/signin">
-                Start Your Free Trial
+                Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <p className="mt-6 text-sm text-purple-200">
-              7-day free trial • Then $5.99/month • Cancel anytime
+              $5.99/month • Cancel anytime
             </p>
           </div>
         </div>

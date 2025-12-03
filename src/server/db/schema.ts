@@ -363,3 +363,20 @@ export const userSettingsRelations = relations(userSettings, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const waitlist = createTable(
+  "waitlist",
+  (d) => ({
+    id: d
+      .varchar({ length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    email: d.varchar({ length: 255 }).notNull().unique(),
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .$defaultFn(() => new Date())
+      .notNull(),
+  }),
+  (t) => [index("waitlist_email_idx").on(t.email)],
+);
