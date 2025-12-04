@@ -57,5 +57,3 @@ yarn-error.log*
 # idea files
 .idea
 
-# vision credentials
-src/vision-sa.json

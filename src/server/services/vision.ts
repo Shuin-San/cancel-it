@@ -23,10 +23,10 @@ function getVisionClient(): ImageAnnotatorClient {
 
   if (env.GOOGLE_VISION_PROJECT_ID) {
     // Option 1: Use file path from GOOGLE_APPLICATION_CREDENTIALS env var (set in CI/CD)
-    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    if (env.GOOGLE_APPLICATION_CREDENTIALS) {
       credentials = {
         projectId: env.GOOGLE_VISION_PROJECT_ID,
-        keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+        keyFilename: env.GOOGLE_APPLICATION_CREDENTIALS,
       };
     }
     // Option 2: Parse JSON credentials if provided directly
