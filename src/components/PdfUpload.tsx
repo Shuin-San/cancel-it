@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
-import { Upload, FileText, X } from "lucide-react";
+import { Upload, FileText, X, Loader2 } from "lucide-react";
 import { PrivacyNotice } from "./PrivacyNotice";
 
 interface PdfUploadProps {
@@ -114,12 +114,18 @@ export function PdfUpload({ onFileSelect, isLoading, maxSizeMB = DEFAULT_MAX_SIZ
 
         {selectedFile ? (
           <div className="flex w-full flex-col items-center gap-4">
-            <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-4">
-              <FileText className="h-8 w-8 text-primary" />
+            <div className="flex items-center gap-3 rounded-lg border bg-muted/50 p-4 w-full">
+              {isLoading ? (
+                <Loader2 className="h-8 w-8 text-primary animate-spin" />
+              ) : (
+                <FileText className="h-8 w-8 text-primary" />
+              )}
               <div className="flex-1">
                 <p className="font-medium">{selectedFile.name}</p>
                 <p className="text-sm text-muted-foreground">
-                  {formatFileSize(selectedFile.size)}
+                  {isLoading
+                    ? "Analyzing PDF with AI... This may take a moment."
+                    : formatFileSize(selectedFile.size)}
                 </p>
               </div>
               {!isLoading && (
@@ -135,27 +141,38 @@ export function PdfUpload({ onFileSelect, isLoading, maxSizeMB = DEFAULT_MAX_SIZ
               )}
             </div>
             {isLoading && (
-              <p className="text-sm text-muted-foreground">
-                Processing PDF... This may take a moment.
-              </p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <p>Uploading to cloud storage and extracting text...</p>
+              </div>
             )}
           </div>
         ) : (
           <>
-            <Upload className="mb-4 h-12 w-12 text-muted-foreground" />
+            {isLoading ? (
+              <Loader2 className="mb-4 h-12 w-12 text-primary animate-spin" />
+            ) : (
+              <Upload className="mb-4 h-12 w-12 text-muted-foreground" />
+            )}
             <p className="mb-2 text-sm font-medium">
-              Drag and drop your bank statement PDF here, or
+              {isLoading
+                ? "Processing PDF..."
+                : "Drag and drop your bank statement PDF here, or"}
             </p>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isLoading}
-            >
-              Browse Files
-            </Button>
+            {!isLoading && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isLoading}
+              >
+                Browse Files
+              </Button>
+            )}
             <p className="mt-4 text-xs text-muted-foreground">
-              PDF files only. Maximum size: {maxSizeMB}MB
+              {isLoading
+                ? "This may take a moment while we analyze your bank statement"
+                : `PDF files only. Maximum size: ${maxSizeMB}MB`}
             </p>
           </>
         )}

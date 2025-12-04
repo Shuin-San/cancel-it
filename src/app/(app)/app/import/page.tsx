@@ -31,14 +31,15 @@ export default function ImportPage() {
 
   const importPdf = api.transaction.importPdf.useMutation({
     onSuccess: async (data) => {
+      setPdfLoading(false);
       toast.success(`Imported ${data.count} transactions from PDF`);
       // Trigger subscription detection
       await detectSubscriptions.mutateAsync();
       router.push("/app/subscriptions");
     },
     onError: (error) => {
-      toast.error(error.message ?? "Failed to import PDF");
       setPdfLoading(false);
+      toast.error(error.message ?? "Failed to import PDF");
     },
   });
 

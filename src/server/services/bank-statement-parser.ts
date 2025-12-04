@@ -54,7 +54,10 @@ export function parseBankStatement(
     ISO: /(\d{4})-(\d{1,2})-(\d{1,2})/g, // YYYY-MM-DD
   };
 
-  const amountPattern = /([+-]?)\$?([\d,]+\.?\d*)/g;
+  // More flexible amount patterns - handles various formats
+  const amountPattern = /([+-]?)\$?\s*([\d,]+\.?\d*)/g;
+  // Also try patterns without $ sign
+  const amountPatternNoSign = /([+-]?)([\d,]+\.?\d{2})\b/g;
 
   // Try to find transaction blocks
   // Common patterns:
@@ -64,14 +67,34 @@ export function parseBankStatement(
 
   let currentDate: Date | null = null;
   let currentBalance: number | undefined;
+  let lastSeenDate: Date | null = null;
 
-  for (const line of lines) {
+  // First pass: extract all dates and amounts, then match them
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
     if (!line) continue;
 
-    // Try to extract date
+    // Try to extract date (more flexible - also try MM/DD format)
     const dateRegex = new RegExp(datePatterns[dateFormat]);
     const dateMatch = dateRegex.exec(line);
-    if (dateMatch) {
+    
+      // Also try MM/DD format (without year, assume current year)
+      if (!dateMatch) {
+        const shortDateRegex = /(\d{1,2})\/(\d{1,2})(?:\s|$)/;
+        const shortMatch = shortDateRegex.exec(line);
+        if (shortMatch) {
+          const [, month, day] = shortMatch;
+          if (month && day) {
+            const now = new Date();
+            currentDate = new Date(
+              now.getFullYear(),
+              parseInt(month, 10) - 1,
+              parseInt(day, 10),
+            );
+            lastSeenDate = currentDate;
+          }
+        }
+      } else {
       const dateStr = dateMatch[0];
       if (dateFormat === "US") {
         const datePartsRegex = /(\d{1,2})\/(\d{1,2})\/(\d{4})/;
@@ -84,6 +107,7 @@ export function parseBankStatement(
               parseInt(month, 10) - 1,
               parseInt(day, 10),
             );
+            lastSeenDate = currentDate;
           }
         }
       } else if (dateFormat === "EU") {
@@ -97,26 +121,37 @@ export function parseBankStatement(
               parseInt(month, 10) - 1,
               parseInt(day, 10),
             );
+            lastSeenDate = currentDate;
           }
         }
       } else if (dateFormat === "ISO") {
         currentDate = new Date(dateStr);
+        lastSeenDate = currentDate;
       }
     }
 
-    // Try to extract amount
-    const amountMatches = Array.from(line.matchAll(amountPattern));
-    if (amountMatches.length > 0 && currentDate) {
+    // Try to extract amount (try both patterns)
+    let amountMatches = Array.from(line.matchAll(amountPattern));
+    if (amountMatches.length === 0) {
+      amountMatches = Array.from(line.matchAll(amountPatternNoSign));
+    }
+
+    // Use current date or last seen date
+    const dateToUse = currentDate ?? lastSeenDate;
+
+    if (amountMatches.length > 0 && dateToUse) {
       for (const match of amountMatches) {
         const sign = match[1] === "-" ? -1 : 1;
         const amountStr = match[2]?.replace(/,/g, "") ?? "";
         const amount = parseFloat(amountStr) * sign;
 
-        if (!isNaN(amount) && Math.abs(amount) > 0.01) {
+        // More lenient amount check - accept amounts > 0.001
+        if (!isNaN(amount) && Math.abs(amount) > 0.001) {
           // Extract description (everything except date and amount)
           let description = line
             .replace(new RegExp(datePatterns[dateFormat]), "")
             .replace(amountPattern, "")
+            .replace(amountPatternNoSign, "")
             .trim();
 
           // Clean up description
@@ -124,6 +159,11 @@ export function parseBankStatement(
             .replace(/\s+/g, " ")
             .replace(/^[^\w]+|[^\w]+$/g, "")
             .trim();
+
+          // If description is empty, try to get context from previous/next lines
+          if (description.length === 0 && i > 0) {
+            description = lines[i - 1]?.trim() ?? "";
+          }
 
           if (description.length > 0) {
             // Try to extract merchant name (usually first part of description)
@@ -140,7 +180,7 @@ export function parseBankStatement(
             const referenceNumber = refMatch?.[1];
 
             transactions.push({
-              date: new Date(currentDate),
+              date: new Date(dateToUse),
               amount,
               description,
               merchant,
@@ -213,4 +253,5 @@ export function normalizeMerchantName(description: string): string {
     .replace(/\s+/g, " ")
     .substring(0, 255); // Limit length
 }
+
 
