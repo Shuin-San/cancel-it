@@ -56,12 +56,17 @@ export async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
     // and processed via asyncBatchAnnotateFiles. For scanned PDFs, convert pages to images
     // and use the Vision API client's documentTextDetection method.
     const pdfParseModule = await import("pdf-parse");
-    // @ts-expect-error - pdf-parse is a CommonJS module
-    const pdfParse = (pdfParseModule.default ?? pdfParseModule) as (
-      buffer: Buffer,
-    ) => Promise<{ text: string }>;
     
-    const data = await pdfParse(pdfBuffer);
+    // pdf-parse exports the function - handle both ESM default and direct export
+    const pdfParse = (pdfParseModule as unknown as { default?: unknown })?.default ?? pdfParseModule;
+    
+    if (typeof pdfParse !== "function") {
+      throw new Error(
+        `Failed to load pdf-parse: expected function but got ${typeof pdfParse}. Please ensure pdf-parse is properly installed.`,
+      );
+    }
+    
+    const data = await (pdfParse as (buffer: Buffer) => Promise<{ text: string }>)(pdfBuffer);
     const text = data.text?.trim() ?? "";
 
     if (text.length > 100) {
