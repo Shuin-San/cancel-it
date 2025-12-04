@@ -7,17 +7,13 @@ on:
     branches: [main, development]
 
 jobs:
-  dev:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create credentials file
-        run: echo "${{ secrets.VISION_CREDENTIAL_JSON }}" > ./vision-sa.json
-
-      - name: Set env variable
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=./vision-sa.json" >> $GITHUB_ENV
-
-      # Add your other steps here (setup node, install dependencies, build, test, etc.)
+      - name: Create google vision credentials file
+        run: |
+          echo "${{ secrets.VISION_CREDENTIAL_JSON }}" > ./src/vision-sa.json
