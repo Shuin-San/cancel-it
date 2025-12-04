@@ -1,6 +1,12 @@
 import { ImageAnnotatorClient } from "@google-cloud/vision";
 import { env } from "~/env";
 
+interface VisionClientOptions {
+  projectId: string;
+  keyFilename?: string;
+  credentials?: Record<string, unknown>;
+}
+
 let client: ImageAnnotatorClient | null = null;
 
 function getVisionClient(): ImageAnnotatorClient {
@@ -13,8 +19,7 @@ function getVisionClient(): ImageAnnotatorClient {
   // 2. Credentials object passed directly
   // 3. Application Default Credentials (ADC)
   
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let credentials: any;
+  let credentials: VisionClientOptions | undefined;
 
   if (env.GOOGLE_VISION_PROJECT_ID) {
     // Option 1: Use file path from GOOGLE_APPLICATION_CREDENTIALS env var (set in CI/CD)
@@ -29,13 +34,10 @@ function getVisionClient(): ImageAnnotatorClient {
       try {
         const credsJson = JSON.parse(
           env.GOOGLE_APPLICATION_CREDENTIALS_JSON,
-        );
+        ) as Record<string, unknown>;
         credentials = {
           projectId: env.GOOGLE_VISION_PROJECT_ID,
           credentials: credsJson,
-        } as {
-          projectId: string;
-          credentials: unknown;
         };
       } catch {
         throw new Error(
@@ -51,7 +53,10 @@ function getVisionClient(): ImageAnnotatorClient {
     }
   }
 
-  client = new ImageAnnotatorClient(credentials);
+  // Type assertion needed because Google Cloud client constructor accepts flexible options
+  client = new ImageAnnotatorClient(
+    credentials as ConstructorParameters<typeof ImageAnnotatorClient>[0],
+  );
 
   return client;
 }
