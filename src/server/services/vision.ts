@@ -3,8 +3,7 @@ import { env } from "~/env";
 
 interface VisionClientOptions {
   projectId: string;
-  keyFilename?: string;
-  credentials?: Record<string, unknown>;
+  keyFilename: string;
 }
 
 let client: ImageAnnotatorClient | null = null;
@@ -14,44 +13,22 @@ function getVisionClient(): ImageAnnotatorClient {
     return client;
   }
 
-  // Google Cloud Vision client can use credentials in multiple ways:
-  // 1. GOOGLE_APPLICATION_CREDENTIALS env var pointing to a file path (standard)
-  // 2. Credentials object passed directly
-  // 3. Application Default Credentials (ADC)
-  
-  let credentials: VisionClientOptions | undefined;
-
-  if (env.GOOGLE_VISION_PROJECT_ID) {
-    // Option 1: Use file path from GOOGLE_APPLICATION_CREDENTIALS env var (set in CI/CD)
-    if (env.GOOGLE_APPLICATION_CREDENTIALS) {
-      credentials = {
-        projectId: env.GOOGLE_VISION_PROJECT_ID,
-        keyFilename: env.GOOGLE_APPLICATION_CREDENTIALS,
-      };
-    }
-    // Option 2: Parse JSON credentials if provided directly
-    else if (env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
-      try {
-        const credsJson = JSON.parse(
-          env.GOOGLE_APPLICATION_CREDENTIALS_JSON,
-        ) as Record<string, unknown>;
-        credentials = {
-          projectId: env.GOOGLE_VISION_PROJECT_ID,
-          credentials: credsJson,
-        };
-      } catch {
-        throw new Error(
-          "GOOGLE_APPLICATION_CREDENTIALS_JSON is not valid JSON",
-        );
-      }
-    }
-    // Option 3: Use Application Default Credentials (for local dev with gcloud auth)
-    else {
-      credentials = {
-        projectId: env.GOOGLE_VISION_PROJECT_ID,
-      };
-    }
+  if (!env.GOOGLE_VISION_PROJECT_ID) {
+    throw new Error(
+      "GOOGLE_VISION_PROJECT_ID is required. Please configure your Google Cloud Vision service account.",
+    );
   }
+
+  if (!env.GOOGLE_APPLICATION_CREDENTIALS) {
+    throw new Error(
+      "GOOGLE_APPLICATION_CREDENTIALS is required. Please set the path to your service account JSON file.",
+    );
+  }
+
+  const credentials: VisionClientOptions = {
+    projectId: env.GOOGLE_VISION_PROJECT_ID,
+    keyFilename: env.GOOGLE_APPLICATION_CREDENTIALS,
+  };
 
   // Type assertion needed because Google Cloud client constructor accepts flexible options
   client = new ImageAnnotatorClient(
@@ -62,62 +39,22 @@ function getVisionClient(): ImageAnnotatorClient {
 }
 
 /**
- * Extract text from PDF using Google Vision API REST endpoint
- * This uses the Vision API's native PDF support via REST API
+ * Extract text from PDF using service account authentication
+ * Note: Google Vision API requires PDFs to be in Google Cloud Storage for native PDF support.
+ * For now, we use pdf-parse for text extraction. For scanned PDFs, consider converting
+ * pages to images and using the Vision API client's documentTextDetection method.
  * @param pdfBuffer - Buffer containing the PDF file
  * @returns Extracted text from all pages of the PDF
  */
 export async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
   try {
-    // Use Vision API REST endpoint directly for PDF support
-    const apiKey = env.GOOGLE_VISION_API_KEY;
-    const base64Pdf = pdfBuffer.toString("base64");
+    // Ensure service account client is initialized (validates credentials)
+    getVisionClient();
 
-    const response = await fetch(
-      `https://vision.googleapis.com/v1/files:asyncBatchAnnotate?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          requests: [
-            {
-              inputConfig: {
-                content: base64Pdf,
-                mimeType: "application/pdf",
-              },
-              features: [{ type: "DOCUMENT_TEXT_DETECTION" }],
-            },
-          ],
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Vision API error: ${response.status} ${response.statusText} - ${errorText}`,
-      );
-    }
-
-    // For async operations, we'd need to poll, but let's try a simpler approach
-    // Actually, asyncBatchAnnotateFiles requires GCS. Let's use a different approach.
-    // We'll convert PDF pages to images and process them, but using a simpler method.
-
-    // Fallback: Try direct REST API call with base64 PDF
-    // Note: Vision API v1 doesn't support PDFs directly in documentTextDetection
-    // We need to use asyncBatchAnnotateFiles which requires GCS, or convert to images
-    
-    // Simplest approach: Use pdf-parse for text-based PDFs, and for scanned PDFs,
-    // we'll need to convert to images. But the user wants to use Vision API PDF support.
-    
-    // Actually, let me use the Vision API's file annotation via REST with base64
-    // But that still requires async processing...
-    
-    // Let me simplify: Use pdf-parse first, and if that fails, throw a clear error
-    // asking user to use a text-based PDF or we can implement image conversion later
-    
+    // For text-based PDFs, use pdf-parse
+    // Note: For full Vision API PDF support with service account, PDFs need to be in GCS
+    // and processed via asyncBatchAnnotateFiles. For scanned PDFs, convert pages to images
+    // and use the Vision API client's documentTextDetection method.
     const pdfParseModule = await import("pdf-parse");
     // @ts-expect-error - pdf-parse is a CommonJS module
     const pdfParse = (pdfParseModule.default ?? pdfParseModule) as (
@@ -132,14 +69,19 @@ export async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
     }
 
     // If pdf-parse didn't work, the PDF is likely scanned
-    // For now, throw a helpful error. We can add image conversion later if needed.
+    // For scanned PDFs, you would need to:
+    // 1. Convert PDF pages to images
+    // 2. Use getVisionClient().documentTextDetection() for each image
     throw new Error(
-      "Unable to extract text from PDF. This PDF appears to be scanned or image-based. Please use a PDF with selectable text.",
+      "Unable to extract text from PDF. This PDF appears to be scanned or image-based. Please use a PDF with selectable text, or implement image conversion for scanned PDFs.",
     );
   } catch (error) {
     if (error instanceof Error) {
       // If it's already our error, re-throw it
-      if (error.message.includes("Unable to extract text")) {
+      if (
+        error.message.includes("Unable to extract text") ||
+        error.message.includes("GOOGLE_VISION_PROJECT_ID")
+      ) {
         throw error;
       }
       throw new Error(`Failed to extract text from PDF: ${error.message}`);
